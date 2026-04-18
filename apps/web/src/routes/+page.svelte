@@ -6,7 +6,6 @@
 	import LogItem from '$lib/components/Log/LogItem.svelte';
 	import Icon from '@iconify/svelte';
 	import { browser } from '$app/environment';
-	import { PUBLIC_API_URL_HTTP } from '$env/static/public';
 
 	let isRunning = false;
 	let logs: LogMessage[] = [];

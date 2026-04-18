@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { token, decodedToken } from '$lib/stores/token';
+	import { token, decodedToken, tokenIsExpired } from '$lib/stores/token';
 	import { calculateDateCountFromNow } from '$lib/utils/dateUtils';
 	import Icon from '@iconify/svelte';
 </script>
 
 <div class="flex grow flex-col space-y-4 pb-2 pt-4 md:space-y-8 md:pb-6 md:pt-8">
-	{#if !$decodedToken}
+	{#if !$decodedToken || $tokenIsExpired}
 		<h2 class="h2">Add your Kide.app bearer token</h2>
 		<p>Token will be saved to browser local storage and used for ticket reservation.</p>
 		<div class="flex space-x-4 sm:space-x-8">
@@ -21,11 +21,16 @@
 			<aside class="alert variant-glass-error">
 				<Icon icon="heroicons:exclamation-triangle-solid" width="unset" class="w-12" />
 				<div class="alert-message">
-					<h3 class="h3">Warning</h3>
-					<p>
-						The token you've entered doesn't seem to be valid. Please refer to the instructions and
-						try again.
-					</p>
+					{#if $tokenIsExpired}
+						<h3 class="h3">Token expired</h3>
+						<p>The token has expired. Please get a new token from kide.app and paste it here.</p>
+					{:else}
+						<h3 class="h3">Warning</h3>
+						<p>
+							The token you've entered doesn't seem to be valid. Please refer to the instructions and
+							try again.
+						</p>
+					{/if}
 				</div>
 			</aside>
 		{/if}

@@ -22,8 +22,6 @@ export const normalizedToken = derived(token, $token => {
 	return '';
 });
 
-export const tokenIsSet = derived(normalizedToken, $token => !!$token);
-
 export const decodedToken = derived(normalizedToken, $token => {
 	if ($token.startsWith('"') || $token.endsWith('"')) {
 		return null;
@@ -50,7 +48,7 @@ export const tokenIsExpired = derived(decodedToken, $decodedToken => {
 	return $decodedToken && $decodedToken.expDate < now;
 });
 
-tokenIsExpired.subscribe(expired => {
-	// User should sign in again if token is expired
-	if (expired) token.set('');
-});
+export const tokenIsSet = derived(
+	[normalizedToken, tokenIsExpired],
+	([$token, $tokenIsExpired]) => !!$token && !$tokenIsExpired
+);
