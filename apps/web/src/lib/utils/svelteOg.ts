@@ -1,5 +1,6 @@
 import { initSvelteOg } from 'svelte-og';
-import NotoSans from '$lib/assets/fonts/NotoSans-Regular.ttf';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export const svelteOg = initSvelteOg({
 	width: 600,
@@ -7,7 +8,8 @@ export const svelteOg = initSvelteOg({
 	fonts: [
 		{
 			name: 'Noto Sans',
-			data: Buffer.from(NotoSans),
+			// Reading font bytes at runtime avoids bundling .ttf directly into the server bundle.
+			data: fs.readFileSync(path.resolve(process.cwd(), 'src/lib/assets/fonts/NotoSans-Regular.ttf')),
 			style: 'normal'
 		}
 	]
